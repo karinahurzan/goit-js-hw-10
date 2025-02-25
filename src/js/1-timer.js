@@ -55,7 +55,7 @@ function addLeadingZero(value) {
 }
 let timerId;
 
-buttonStart.addEventListener('click', () => {
+startButton.addEventListener('click', () => {
   startButton.disabled = true;
   input.disabled = true;
 
