@@ -8,10 +8,10 @@ import 'izitoast/dist/css/iziToast.min.css';
 
 const input = document.querySelector('#datetime-picker');
 const startButton = document.querySelector('[data-start]');
-const days = document.querySelector('[data-days]');
-const hours = document.querySelector('[data-hours]');
-const minutes = document.querySelector('[data-minutes]');
-const seconds = document.querySelector('[data-seconds]');
+const daysData = document.querySelector('[data-days]');
+const hoursData = document.querySelector('[data-hours]');
+const minutesData = document.querySelector('[data-minutes]');
+const secondsData = document.querySelector('[data-seconds]');
 
 let userSelectedDate;
 
@@ -21,11 +21,12 @@ const options = {
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
-    userSelectedDate = selectedDates[0];
-    if (userSelectedDate < new Date()) {
+    const selectedDate = selectedDates[0];
+    if (selectedDate < new Date()) {
       window.alert('Please choose a date in the future');
       startButton.disabled = true;
     } else {
+      userSelectedDate = selectedDate;
       startButton.disabled = false;
     }
   },
@@ -52,32 +53,31 @@ function convertMs(ms) {
 function addLeadingZero(value) {
   return String(value).padStart(2, '0');
 }
-
 let timerId;
 
-startButton.addEventListener('click', () => {
+buttonStart.addEventListener('click', () => {
   startButton.disabled = true;
   input.disabled = true;
 
   timerId = setInterval(() => {
     const currentTime = new Date();
-    const delayTime = userSelectedDate - currentTime;
+    const deltaTime = userSelectedDate - currentTime;
 
-    if (delayTime <= 0) {
+    if (deltaTime <= 0) {
       clearInterval(timerId);
-      days.textContent = '00';
-      hours.textContent = '00';
-      minutes.textContent = '00';
-      seconds.textContent = '00';
+      daysData.textContent = '00';
+      hoursData.textContent = '00';
+      minutesData.textContent = '00';
+      secondsData.textContent = '00';
       input.disabled = false;
       return;
     }
 
-    const { daysNew, hoursNew, minutesNew, secondsNew } = convertMs(delayTime);
+    const { days, hours, minutes, seconds } = convertMs(deltaTime);
 
-    days.textContent = addLeadingZero(daysNew);
-    hours.textContent = addLeadingZero(hoursNew);
-    minutes.textContent = addLeadingZero(minutesNew);
-    seconds.textContent = addLeadingZero(secondsNew);
+    daysData.textContent = addLeadingZero(days);
+    hoursData.textContent = addLeadingZero(hours);
+    minutesData.textContent = addLeadingZero(minutes);
+    secondsData.textContent = addLeadingZero(seconds);
   }, 1000);
 });
